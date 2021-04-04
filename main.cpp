@@ -1,42 +1,48 @@
-/*
-	亟待解决的问题：
-	1.排行榜读取内容
-	2.读档
-	
-	////////////////////////////////
-	////////////////////////////////
-
-	可以更新的内容
-	1.道具
-*/
-
 #include <conio.h>
 #include <graphics.h>
-#include "bookmarks.h"
 #include "functionsmain.h"
 
-/*
-	errorCode:
-	0	玩家退出
-	1	内存不足（malloc堆）
-*/
+extern struct _node;
+extern struct _level;
+extern struct _crok;
 
 int main(void) {
 
 	/////////////////
 	//   伪全局变量  //
 	/////////////////
-	PLAYER player;
-	LEVEL_N* l_head = NULL;
-	e_errorCode errorCode = normal;
+	//	关卡相关
+	LEVEL thisLevel;
+	thisLevel.currentLevel = 5;
+	thisLevel.gameScore = 0;
+
+	//	矿物相关
+	MINE* head = NULL;
+
+	//	钩子相关
+	CROK thisCrok;
+	thisCrok.angle = 1;
+	thisCrok.crokConductance = 0;
+	thisCrok.crokLong = 50;
+	thisCrok.rollTemp = left;
+	thisCrok.crokNowState = hang;
+
+	thisCrok.startPointCrok_X = 475;	//	预留接口
+	thisCrok.startPointCrok_Y = 50;		//	预留接口
 
 	///////////////
 	//  游戏函数  //
 	///////////////
-	bookmarkOpening(&player, &errorCode);
-	l_head = bookmarkGenerator(l_head, &(player.userLevel.currentLevel), &errorCode);
-	bookmarkMain(&(player.userLevel.currentLevel), l_head, &player, &errorCode);
-	gameOver(l_head);
+	head = startup(head, &thisLevel);
 
-	return errorCode;
+	while (1) {
+		show(head, &thisLevel);
+		updateWithoutImput(head, &thisLevel, &thisCrok);
+		updateWithImput(&thisCrok);
+
+		FlushBatchDraw();
+		Sleep(10);
+	}
+
+	return 0;
 }

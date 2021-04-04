@@ -4,23 +4,12 @@
 //   结构体们  //
 ////////////////
 
-//	错误枚举体
-enum e_errorCode {
-	normal,
-	exitByPlayer,
-	lowHeapMemory,
-	fileOpenFailed,
-	doNotHaveUsername
-};
-
 //	矿物结构体
-//	矿物类型的枚举体数值代表该矿物的价值
-enum mineKind { stone = 1, iron = 5, gold = 15, diamond = 20, emerald = 30};
+enum mineKind { stone, gold, diamond };
 enum mineState { available, croked };
 typedef struct _node {
 	enum mineKind kind;				//	kind表示就矿物类型
 	enum mineState state;			//	state表示状态
-	int size;						//	矿物尺寸大小
 	int Pos_x;	int Pos_y;			//	xy是横纵坐标
 	struct _node* next;
 } MINE;
@@ -31,12 +20,7 @@ typedef struct _level {
 	int gameScore;					//	当前得分
 	int timeLast;					//	剩余时间
 	int passScore;					//	通关所需要的得分
-} LEVEL;
-
-typedef struct _level_node {
-	LEVEL currentlevel;
-	struct _level_node* next;
-} LEVEL_N;
+} LEVEL ;
 
 //	钩子结构体
 enum rollTempKind { right, left };
@@ -52,22 +36,16 @@ typedef struct _crok {
 
 	int startPointCrok_X;			//	预留接口
 	int startPointCrok_Y;			//	预留接口
-} CROK;
-
-//	用户结构体
-typedef struct _user {
-	char userName[10];
-	LEVEL userLevel;
-} PLAYER;
+} CROK ;
 
 
 ////////////////
 //   主函数们  //
 ////////////////
-MINE* startup(MINE* head, LEVEL*, PLAYER*, e_errorCode*);
+MINE* startup(MINE* head, LEVEL*);
 
-void show(MINE*, LEVEL*, PLAYER*, e_errorCode*);
+void show(MINE*, LEVEL*);
 
-void updateWithoutImput(MINE*, LEVEL*, CROK*, LEVEL_N*, PLAYER*, e_errorCode*);
+void updateWithoutImput(MINE*, LEVEL*, CROK*);
 
-void updateWithImput(CROK*, PLAYER*, LEVEL*, e_errorCode*);
+void updateWithImput(CROK*);
