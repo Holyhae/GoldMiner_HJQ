@@ -1,0 +1,49 @@
+//这个文件用于存储游戏里生物的种种行为和功能
+/*
+
+	通过宏来加载
+	一定要检查是否有语法问题
+	像这样放写就可以
+	id与其他文件的id要对应上
+	mob尺寸是 96*35
+*/
+
+//	蠹虫
+case 1:
+for (MINE* j = m_head; j; j = j->next)
+{
+	if (
+			(i->x < j->Pos_x + j->size) &&
+			(i->y + 35 < j->Pos_y + j->size) &&
+			(i->y + 17 > j->Pos_y) &&
+			(i->x + 96 > j->Pos_x)
+		)
+	{
+		j->state = hooked;
+		i->data = i->data + (j->kind) / 3;
+	}
+}
+for (ITEM* j = i_head; j; j = j->next)
+{
+	if (
+			(i->x < j->x + 32) &&
+			(i->y + 35 < j->y + 32) &&
+			(i->y + 17	 > j->y) &&
+			(i->x + 96 > j->x)
+		)
+	{
+		j->state = i_hooked;
+	}
+}
+
+//	没碰到东西
+if ((player->userLevel.timeLast % 100 > 80) && (player->userLevel.timeLast % 100 <= 10))
+{
+	(i->x) -= 2;
+} else if ((player->userLevel.timeLast % 100 <= 80) && (player->userLevel.timeLast % 100 > 75)){
+	(i->x)--;
+} else {
+	//	无
+}
+
+break;

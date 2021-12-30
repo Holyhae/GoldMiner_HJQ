@@ -1,0 +1,78 @@
+//	这个文件写的是每个道具被在被调的一瞬间会发生什么
+/*
+
+	通过宏来加载
+	一定要检查是否有语法问题
+	像这样放写就可以
+	id与其他文件的id要对应上
+
+*/
+
+///////////////
+//		原版
+///////////////
+//	TNT
+case 1:
+for (MINE* i = m_head; i; i = i->next)
+{
+	if ((i->Pos_x - thisItem->x) * (i->Pos_x - thisItem->x) + (i->Pos_y - thisItem->y) * (i->Pos_y - thisItem->y) < 96 * 96) {
+		i->state = hooked;
+	}
+}
+for (ITEM* i = i_head->gameItemHead; i; i = i->next)
+{
+	if ((i->x - thisItem->x) * (i->x - thisItem->x) + (i->y - thisItem->y) * (i->y - thisItem->y) < 96 * 96) {
+		i->state = i_hooked;
+	}
+}
+
+//	产生冲击波
+char nameBuff[64];
+sprintf_s(nameBuff, ".\\data\\item\\textures\\%s\\item\\Boom.png", gameSet->resourcepacksName);
+loadimage(&boomImage[0], _T(nameBuff));
+sprintf_s(nameBuff, ".\\data\\item\\textures\\%s\\item\\Boom_mask.png", gameSet->resourcepacksName);
+loadimage(&boomImage[1], _T(nameBuff));
+putimage(thisHook->endPointX - 418/2, thisHook->endPointY - 316/2, &boomImage[1], NOTSRCERASE);
+putimage(thisHook->endPointX - 418/2, thisHook->endPointY - 316/2, &boomImage[0], SRCINVERT);
+
+//	走流程
+thisItem->state = i_hooked;
+thisHook->hookConductance = 8;
+thisHook->hookNowState = back;
+thisHook->func = thisItem->kind;
+break;
+
+//	幸运药水
+case 9:
+for (MINE* i = m_head; i; i = i->next)
+{
+	if (i-> state = available) {
+		switch (i->kind) {
+			case stone:
+			i->kind = iron;
+			break;
+			case iron:
+			i->kind = gold;
+			break;
+			case gold:
+			i->kind = diamond;
+			break;
+			case diamond:
+			i->kind = emerald;
+			break;
+			default:
+			break;
+		}
+	}
+}
+//	走流程
+thisItem->state = i_hooked;
+thisHook->hookConductance = 8;
+thisHook->hookNowState = back;
+thisHook->func = thisItem->kind;
+break;
+
+
+///////////////
+//		减慢游戏速度的
+///////////////

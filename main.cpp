@@ -1,48 +1,60 @@
+/*
+	迷魂药的道具和大力丸的道具
+	设置界面完善
+*/
+
+#include <stdio.h>
+#include <stdlib.h>
 #include <conio.h>
 #include <graphics.h>
+#include "bookmarks.h"
 #include "functionsmain.h"
+#pragma comment(lib,"WINMM.LIB")
 
-extern struct _node;
-extern struct _level;
-extern struct _crok;
-
-int main(void) {
+int main(int agrc, char* argv[]) {
 
 	/////////////////
 	//   伪全局变量  //
 	/////////////////
-	//	关卡相关
-	LEVEL thisLevel;
-	thisLevel.currentLevel = 5;
-	thisLevel.gameScore = 0;
+	PLAYER player;
 
-	//	矿物相关
-	MINE* head = NULL;
+	ERR error;
+	error.code = normal;
 
-	//	钩子相关
-	CROK thisCrok;
-	thisCrok.angle = 1;
-	thisCrok.crokConductance = 0;
-	thisCrok.crokLong = 50;
-	thisCrok.rollTemp = left;
-	thisCrok.crokNowState = hang;
+	SETTING gameSet;
+	gameSet.putItems = true;
+	strcpy_s(gameSet.resourcepacksName, "Sphax");
+	gameSet.autoSave = false;							//	默认不自动保存
+	gameSet.doMobSpawn = true;
+	gameSet.KB_enlongHook = ' ';
+	gameSet.KB_pauseGame = 'p';
+	gameSet.KB_quitGame = 'q';
+	gameSet.KB_saveGame = 's';
 
-	thisCrok.startPointCrok_X = 475;	//	预留接口
-	thisCrok.startPointCrok_Y = 50;		//	预留接口
+	gameSet.debugMode = false;
 
 	///////////////
 	//  游戏函数  //
 	///////////////
-	head = startup(head, &thisLevel);
+	bookmarkOpening(&player, &error, &gameSet);
+	bookmarkMain(&player, &error, &gameSet);
+	
+	return (int)(error.code);
+}
 
-	while (1) {
-		show(head, &thisLevel);
-		updateWithoutImput(head, &thisLevel, &thisCrok);
-		updateWithImput(&thisCrok);
+//	版本信息显示
+void version_info(const SETTING * set) {
+	char rsPackBuff[64];
+	sprintf_s(rsPackBuff, " Resource pack = %s", set->resourcepacksName);
+	
+	//	字体格式
+	settextcolor(BLACK);
+	settextstyle(15, 0, _T("宋体"));
 
-		FlushBatchDraw();
-		Sleep(10);
-	}
-
-	return 0;
+	//	信息显示
+	if (set->debugMode) { outtextxy(0, 17 * 0, _T(" Version：1.3.0_debug")); }
+	else { outtextxy(0, 17 * 0, _T(" Version：1.2.2 Release")); }
+	outtextxy(0, 17 * 1, _T(" 0 DLCs loaded"));
+	outtextxy(0, 17 * 2, _T(rsPackBuff));
+	outtextxy(0, 17 * 3, _T(" Made by 20080216HJQ"));
 }

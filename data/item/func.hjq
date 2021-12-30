@@ -1,0 +1,108 @@
+//	这个文件写的是每个道具为钩子附加的功能
+/*
+
+	通过宏来加载
+	一定要检查是否有语法问题
+	像这样放写就可以
+	id与其他文件的id要对应上
+
+*/
+/*
+//	默认的
+thisHook->func = 0;
+i->Pos_x = (thisHook->endPointX) - (i->size) / 2;
+i->Pos_y = thisHook->endPointY - 8;
+thisHook->hookConductance = pow(3.0 - (i->size) / 32, 3);
+thisHook->hookNowState = back;
+*/
+
+///////////////
+//		原版
+///////////////
+
+//	末地水晶
+case 2:
+i->state = hooked;
+(player->userLevel.gameScore) += (int)(i->kind) * (i->size) / 32;
+thisHook->hookConductance = 10;
+thisHook->hookNowState = back;
+thisHook->func = 0;
+break;
+
+//	地狱合金
+case 3:
+if (i->kind == stone) {
+	i->state = hooked;
+}
+else {
+	thisHook->func = 0;
+	i->Pos_x = (thisHook->endPointX) - (i->size) / 2;
+	i->Pos_y = thisHook->endPointY - 8;
+	thisHook->hookConductance = pow(3.0 - (i->size) / 32, 3);
+	thisHook->hookNowState = back;
+}
+break;
+
+//	经验之瓶
+case 4:
+thisHook->func = 0;
+i->Pos_x = (thisHook->endPointX) - (i->size) / 2;
+i->Pos_y = thisHook->endPointY - 8;
+thisHook->hookConductance = pow(3.0 - (i->size) / 32, 3);
+thisHook->hookNowState = back;
+break;
+
+//	史莱姆球
+case 5:
+for (MINE* i = m_head; i; i = i->next)
+{
+	if ((i->Pos_x - thisHook->endPointX) * (i->Pos_x - thisHook->endPointX) + (i->Pos_y - thisHook->endPointY) * (i->Pos_y - thisHook->endPointY) < i->size * i->size) {
+		i->Pos_x = thisHook->endPointX;
+		i->Pos_y = thisHook->endPointY;
+	}
+}
+//for (ITEM* i = i_head; i; i = i->next)
+//{
+//	if ((i->x - thisHook->endPointX) * (i->x - thisHook->endPointX) + (i->y - thisHook->endPointY) * (i->y - thisHook->endPointY) < 48 * 48) {
+//		i->x = thisHook->endPointX;
+//		i->y = thisHook->endPointY;
+//	}
+//}
+thisHook->func = 0;
+i->Pos_x = (thisHook->endPointX) - (i->size) / 2;
+i->Pos_y = thisHook->endPointY - 8;
+thisHook->hookConductance = pow(3.0 - (i->size) / 32, 3);
+thisHook->hookNowState = back;
+break;
+
+//	力量药剂
+case 6:
+//thisHook->func = 0;
+i->Pos_x = (thisHook->endPointX) - (i->size) / 2;
+i->Pos_y = thisHook->endPointY - 8;
+thisHook->hookConductance = 8;
+thisHook->hookNowState = back;
+break;
+
+//	反胃药剂
+case 7:
+thisHook->func = 0;
+i->Pos_x = rand() % (WIDTH - (i->size));
+i->Pos_y = rand() % (HIGH - GRASS_HIGHT - (i->size)) + GRASS_HIGHT;
+//thisHook->hookConductance = 10;
+//thisHook->hookNowState = back;
+break;
+
+//	虚弱药剂
+case 8:
+//thisHook->func = 0;
+i->Pos_x = (thisHook->endPointX) - (i->size) / 2;
+i->Pos_y = thisHook->endPointY - 8;
+thisHook->hookConductance = 1;
+thisHook->hookNowState = back;
+break;
+
+
+///////////////
+//		减慢游戏速度的
+///////////////
